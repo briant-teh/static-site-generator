@@ -1,6 +1,10 @@
 import unittest
 
-from htmlnode import HTMLNode, LeafNode, ParentNode
+from htmlnode import (
+    HTMLNode,
+    LeafNode,
+    ParentNode,
+)
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -85,15 +89,19 @@ class TestHTMLNode(unittest.TestCase):
     def test_parent_to_html_no_children(self):
         node = ParentNode("p", None)
         self.assertRaises(ValueError, node.to_html)
-        
+
     def test_eq(self):
-        node1 = HTMLNode("a", "This is a link", None, {"href":"https://www.google.com"})
-        node2 = HTMLNode("a", "This is a link", None, {"href":"https://www.google.com"})
+        node1 = HTMLNode("a", "This is a link", None, {
+                         "href": "https://www.google.com"})
+        node2 = HTMLNode("a", "This is a link", None, {
+                         "href": "https://www.google.com"})
         self.assertEqual(node1, node2)
-        
+
     def test_not_eq(self):
-        node1 = HTMLNode("a", "This is a link", None, {"href":"https://www.google.com"})
-        node2 = HTMLNode("a", "Click me!", None, {"href":"https://www.google.com"})
+        node1 = HTMLNode("a", "This is a link", None, {
+                         "href": "https://www.google.com"})
+        node2 = HTMLNode("a", "Click me!", None, {
+                         "href": "https://www.google.com"})
         self.assertNotEqual(node1, node2)
 
     def test_repr(self):

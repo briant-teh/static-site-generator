@@ -17,6 +17,17 @@ class HTMLNode:
         html_string = " ".join(map(convert, self.props))
         return html_string
 
+    def __eq__(self, other):
+        if self.tag != other.tag:
+            return False
+        if self.value != other.value:
+            return False
+        if self.children != other.children:
+            return False
+        if self.props != other.props:
+            return False
+        return True
+
     def __repr__(self):
         return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
 
@@ -26,7 +37,7 @@ class LeafNode(HTMLNode):
         super().__init__(tag, value, None, props)
 
     def to_html(self):
-        if self.value == None or self.value == "":
+        if self.value == None:
             raise ValueError(
                 "value cannot be empty for LeafNode")
         if self.tag == None or self.tag == "":
