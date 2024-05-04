@@ -108,3 +108,8 @@ class TestHTMLNode(unittest.TestCase):
         node = HTMLNode("p", "This is a paragraph", None, None)
         self.assertEqual(
             str(node), "HTMLNode(p, This is a paragraph, None, None)")
+
+
+print(f"__name__: {__name__}")
+if __name__ == "__main__":
+    unittest.main()
