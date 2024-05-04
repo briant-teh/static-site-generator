@@ -63,7 +63,6 @@ class ParentNode(HTMLNode):
 
         html_string = wrap_text_with_tags(
             self.tag, child_html_string, self.props_to_html())
-        # html_string = f"<{self.tag}>{child_html_string}</{self.tag}>"
         return html_string
 
 
