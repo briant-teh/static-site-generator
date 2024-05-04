@@ -5,7 +5,9 @@ from textnode import (
 )
 
 from inline_markdown import (
-    split_nodes_delimiter
+    split_nodes_delimiter,
+    extract_markdown_images,
+    extract_markdown_links
 )
 
 
@@ -57,3 +59,53 @@ class InlineMarkdown(unittest.TestCase):
         node = TextNode("This is text with a `code block word", TextType.TEXT)
         self.assertRaises(ValueError, split_nodes_delimiter,
                           [node], "`", TextType.CODE)
+
+    def test_extract_markdown_images(self):
+        text = "This is text with an " + \
+            "![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) " + \
+            "and ![another](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png)"
+        list_of_extracted_images = [
+            ("image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+            ("another", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png"),
+        ]
+        self.assertEqual(extract_markdown_images(
+            text), list_of_extracted_images)
+        
+    def test_extract_markdown_images_empty_alt(self):
+        text = "This is text with an " + \
+            "!(https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) " + \
+            "and ![another](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png)"
+        list_of_extracted_images = [
+            ("another", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png"),
+        ]
+        self.assertEqual(extract_markdown_images(
+            text), list_of_extracted_images)
+        
+    def test_extract_markdown_images_empty_no_image(self):
+        text = "This is text with no image"
+        list_of_extracted_images = []
+        self.assertEqual(extract_markdown_images(
+            text), list_of_extracted_images)
+
+    def test_extract_markdown_links(self):
+        text = "This is text with a [link](https://www.example.com) " + \
+            "and [another](https://www.example.com/another)"
+        list_of_extracted_links = [
+            ("link", "https://www.example.com"),
+            ("another", "https://www.example.com/another"),
+        ]
+        self.assertEqual(extract_markdown_links(text), list_of_extracted_links)
+        
+    def test_extract_markdown_links_empty_anchor_text(self):
+        text = "This is text with a (https://www.example.com) " + \
+            "and [another](https://www.example.com/another)"
+        list_of_extracted_links = [
+            ("another", "https://www.example.com/another"),
+        ]
+        self.assertEqual(extract_markdown_links(text), list_of_extracted_links)
+        
+    def test_extract_markdown_links_no_links(self):
+        text = "This is text with no links"
+        list_of_extracted_links = []
+        self.assertEqual(extract_markdown_links(
+            text), list_of_extracted_links)
