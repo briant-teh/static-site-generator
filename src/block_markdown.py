@@ -1,4 +1,5 @@
 import re
+import os
 
 from enum import Enum
 from htmlnode import (
@@ -25,6 +26,14 @@ def markdown_to_blocks(markdown):
     blocks = list(filter(lambda x: x != "", blocks))
     blocks = list(map(lambda x: x.strip(), blocks))
     return blocks
+
+
+def markdown_to_lines(markdown):
+    blocks = markdown_to_blocks(markdown)
+    lines = []
+    for block in blocks:
+        lines.extend(block.split("\n"))
+    return lines
 
 
 def block_to_block_type(block):
@@ -69,10 +78,12 @@ def block_to_block_type(block):
 
 def block_to_paragraph(block):
     text_nodes = text_to_text_nodes(block)
-    if len(text_nodes) <= 1:
-        return LeafNode("p", block)
-
     html_nodes = list(map(text_node_to_html_node, text_nodes))
+
+    if len(html_nodes) == 1:
+        if html_nodes[0].tag == None:
+            return LeafNode("p", html_nodes[0].value)
+        return html_nodes[0]
     return ParentNode("p", html_nodes)
 
 

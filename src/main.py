@@ -1,13 +1,19 @@
-from textnode import TextNode, TextType
-from inline_markdown import extract_markdown_links
+from gen_content import (
+    generate_page,
+    generate_pages_recursive,
+)
+from copy_static import copy_directory
+import os
+import shutil
 
 
 def main():
-    node = TextNode("This is a text node", TextType.BOLD, "https://boot.dev")
-    print(node)
+    if os.path.exists("public"):
+        shutil.rmtree("public")
+    copy_directory("static", "public")
 
-    node2 = TextNode("This is text with a [link](https://www.example.com) ", TextType.TEXT)
-    print(extract_markdown_links(node2.text))
+    generate_pages_recursive(
+        "content/index.md", "template.html", "public/index.html")
 
 
 main()
