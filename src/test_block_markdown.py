@@ -11,7 +11,7 @@ from block_markdown import (
     block_to_quote,
     block_to_unordered_list,
     block_to_ordered_list,
-    markdown_to_html_node,
+    markdown_to_html_node
 )
 
 from htmlnode import (
@@ -63,6 +63,12 @@ class TestBlockMarkdown(unittest.TestCase):
         block = "paragraph 1\nparagraph 2"
         self.assertEqual(block_to_paragraph(block),
                          LeafNode("p", "paragraph 1\nparagraph 2"))
+        block = "**Bolded Text**"
+        self.assertEqual(block_to_paragraph(block),
+                         LeafNode("b", "Bolded Text"))
+        block = "[link](https://www.example.com)"
+        self.assertEqual(block_to_paragraph(block),
+                         LeafNode("a", "link", {"href": "https://www.example.com"}))
 
     def test_block_to_paragraph_with_inline(self):
         block = "paragraph 1 contains *italic* text"

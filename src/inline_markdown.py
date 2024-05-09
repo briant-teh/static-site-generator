@@ -19,13 +19,13 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             new_nodes.append(TextNode(node.text, TextType.TEXT, node.url))
             continue
 
-        sub_str = (list(filter(lambda x: x != "", sub_str)))
-
         if len(sub_str) % 2 == 0:
             raise ValueError(
                 "invalid syntax: opening delimiter was found without closing delimiter")
 
         for i in range(0, len(sub_str)):
+            if sub_str[i] == "":
+                continue
             if i % 2 == 0:
                 new_nodes.append(TextNode(sub_str[i], TextType.TEXT))
                 continue
